@@ -1,0 +1,217 @@
+
+/*          _ 
+［］  ［］ ［］  //
+［］［］［］ ［］ //
+［］  ［］ ［］ O
+someone should've told me its possible to just 
+code on pc and then paste it 
+into the game on mobile 
+*/
+// VARABLIES GO HERE !!!
+var heal = 10 
+  
+//
+// FUNCS GO HERE 
+
+// func to tell what weakness the foe has
+func DisplayWeak(x)  
+  ?x = aether & 
+  ^ x = vigor & 
+  ^ x = poison & 
+  ^ x = ice &
+  ^ x = fire 
+    return ITS DYSAN JUMP HIM
+  ?x = aether
+    return vigor
+  :?x = vigor
+    return poison
+  :?x = poison
+    return ice
+  :?x = ice 
+    return fire
+  :?x = fire 
+    return aether
+  :
+    return none
+//
+func HEAL(h)
+  ?hp = maxhp | heal > 1000
+    heal = 10
+
+  ?hp <= maxhp / 2 | h > 10
+    heal++
+    Equipl vigor sw
+    Equipr vigor sh   
+  
+func DYSANPROT()
+  
+  
+  ?foe = phase1 
+    Equip bar
+   
+  :?foe = phase2
+    ?foe = vigor 
+      Equipl Poison Sword +1 6*
+      Equipr vigor sh
+    :?foe = poison 
+      equipl Ice Sword +6 5*
+      Equipr vigor sh
+    :?foe = ice 
+      Equipl Fire Wand +4 4*
+      Equipr vigor sh
+    :?foe = fire
+      Equipl aether sword +2 6*
+      Equipr vigor sh
+    :?foe = aether 
+      Equipl vigor sword +9 7*
+      Equipr vigor sh  :?foe = phase3 
+   
+  ?foe = phase3 
+    ?foe.state >= 115 
+      // IM FIRING MAH LASER
+      ?foe.state = 115 & foe.time = 50 
+        Equipl mind 
+        //WEAVE
+      :?foe.state = 115 & foe.time > 50
+        equip re
+        //LAYOUT THAT MF
+       
+    :
+      Equip bar
+   
+  
+  :
+    HEAL(heal)
+      
+// 
+/* 
+FARM SCRIPTS 
+DEADWOOD    # *8
+CAVES       # *7
+ICE         # *5
+MINE        # *?
+HALLS       # *7
+MUSHROOM    # *8
+ROCKY       # *6
+*/
+//
+var BARD = ＂Bardiche +11 8*＂
+?loc = deadwood & loc.stars > 3// works on 7*
+  ?foe = boss 
+    equip bar
+    
+    ?foe.state >= 32 
+      Equipr co
+      Equipl stone Hammer
+    
+  :?foe.distance >= 10 & foe ! immune_to_ranged
+     Equip rep
+  :?foe.count >= 3 | foe = immune_to_ranged
+     Equip bard
+:
+  ?foe.state <= 0 
+    Equipl ki
+  :
+    Equip tri
+    
+
+  ?foe = boss 
+    equip bar
+    
+  :?foe.distance >= 10 & foe ! immune_to_ranged
+     Equipr bow
+  :?foe.count >= 3 | foe = immune_to_ranged
+     Equipr stone hammer
+//
+?loc = caves // works on 7 *
+
+  ?foe = boss
+    Equipr co
+    Equipl stone ha
+  :?foe.distance < 10 | foe.count >= 4
+    Equip bar
+  :?foe.distance > 10 & foe.count <= 1
+    Equip re
+
+//
+?loc = icy // works on 5*
+  ?foe = boss
+    ?foe.distance >= 10
+      Equip das
+    :?foe.armor >= 0 
+      Equip bar
+    : 
+      Equipl vigor sw
+      Equipr vigor sh
+  :
+    ?foe.distance > 10 
+      Equip fire
+    :?foe.count >= 3 | foe.distance <= 10
+      Equip ba
+//
+?loc = mine // no idea
+  ?foe.distance <= 10 | foe.count >= 4
+    Equip bar
+  :?foe = boss 
+    equipl aether
+    equipr aether wa
+  :
+    equip re
+//
+?loc = halls // works on 7* ???
+  ?foe = Booo | foe = Big booo
+    Equip vigor wa
+  : 
+    Equip ba
+//
+?loc = Mushroom forest | loc = angry mushroom
+  ?foe = boss
+    
+    ?foe.armor > 0 
+      Equip ba
+    :
+      Equipr co
+      Equipl stone ham
+  :
+    ?foe.distance > 10 & foe.count <= 4
+      Equip re
+    :
+      Equip ba
+//
+?loc = temple // no idea what this works on
+  ?foe.distance < 10 & foe.count >= 3
+    Equip bard
+  :
+    Equip re
+//
+
+?loc = rocky // 6*
+ 
+  DYSANPROT(heal)
+ 
+  
+// 
+/* Some scripts to make 
+potions and moving faster easy 
+*/
+?hp < 7 // I only use HP potions ngl 
+  activate potion
+//
+?pickup | foe.distance >= 30 | foe.state < 0
+  EquipL star
+  EquipR tri
+
+//
+var stat = 6
+// PRINT SCRIPTS 
+>`0,@stat@,Name:@foe.name@
+>`0,@stat+1@,Weakness:@DisplayWeak(foe)@
+>`0,@stat+2@,State:@foe.state@
+>`0,@stat+3@,time:@foe.time@ 
+>`0,@stat+4@,Location:@loc.name@
+>`0,@stat+5@,@item.left.state@:@item.left.time@
+>`0,@stat+6@,
+^@item.right.state@:@item.right.time@
+
+
+
