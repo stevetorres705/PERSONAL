@@ -79,9 +79,9 @@ func DYSANPROT()
     :
       Equip bar
    
-  
-  :
-    HEAL(heal)
+
+
+  HEAL(heal)
       
 // 
 /* 
