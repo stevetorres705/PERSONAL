@@ -65,13 +65,13 @@ func DYSANPROT()
       equipl Ice Sword +6 5*
       Equipr vigor sh
     :?foe = ice 
-      Equipl Fire Wand +4 4*
+      Equipl Fire 
       Equipr vigor sh
     :?foe = fire
       Equipl aether sword +2 6*
       Equipr vigor sh
     :?foe = aether 
-      Equipl vigor sword +9 7*
+      Equipl vigor swor
       Equipr vigor sh  :?foe = phase3 
    
   ?foe = phase3 
@@ -118,11 +118,11 @@ var BARD = ＂Bardiche +11 8*＂
     equip bar
     
     
-    ?foe.state >= 32 & foe = phase2
+    ?foe.state >= 32 & foe ! immune_to_stun
       Equipr co
       Equipl stone Hammer
      
-    HEAL(heal)
+    
     
   :?foe.distance >= 10 & foe ! immune_to_ranged
      Equip rep
@@ -131,7 +131,7 @@ var BARD = ＂Bardiche +11 8*＂
      Equip bard
     
 
-  HEAL(heal)
+ 
 
     
 
@@ -249,6 +249,8 @@ var stat2 = 5
 >`@stat2@,@stat+5@,
 ^Cur:@totaltime@|Best:@loc.besttime@
 ^|Avg:@loc.averagetime@
+>`@stat2@,@stat+6@,
+^@foe.name@ 
 /*
 >`0,25,<><><><><］<><><><><］<><><><><］<><><><><］
 ^<><><><><］<><><><><］<><><><><］<><><><><］
