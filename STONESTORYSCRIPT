@@ -10,8 +10,16 @@ into the game on mobile
 // VARABLIES GO HERE !!!
 var heal = 10 
   
+
+
 //
 // FUNCS GO HERE 
+
+
+  
+  
+  
+//
 
 // func to tell what weakness the foe has
 func DisplayWeak(x)  
@@ -38,7 +46,7 @@ func HEAL(h)
   ?hp = maxhp | heal > 1000
     heal = 10
 
-  ?hp <= maxhp / 2 | h > 10
+  :?hp <= maxhp / 2 | h > 10
     heal++
     Equipl vigor sw
     Equipr vigor sh   
@@ -79,8 +87,8 @@ func DYSANPROT()
     :
       Equip bar
    
-
-
+  
+ 
   HEAL(heal)
       
 // 
@@ -94,44 +102,52 @@ HALLS       # *7
 MUSHROOM    # *8
 ROCKY       # *6
 */
+// not really a func but 
+// AAC FUNC
+?item.left.state = 3 
+  equipl 0* 
+  equipl @item.left@
+?item.right.state = 3
+  equipr 0*
+  equipr @item.right@
 //
 var BARD = ＂Bardiche +11 8*＂
 ?loc = deadwood & loc.stars > 3// works on 7*
   ?foe = boss 
+    
     equip bar
     
-    ?foe.state >= 32 
+    
+    ?foe.state >= 32 & foe = phase2
       Equipr co
       Equipl stone Hammer
+     
+    HEAL(heal)
     
   :?foe.distance >= 10 & foe ! immune_to_ranged
      Equip rep
+    
   :?foe.count >= 3 | foe = immune_to_ranged
      Equip bard
-:
-  ?foe.state <= 0 
-    Equipl ki
-  :
-    Equip tri
     
 
-  ?foe = boss 
-    equip bar
+  HEAL(heal)
+
     
-  :?foe.distance >= 10 & foe ! immune_to_ranged
-     Equipr bow
-  :?foe.count >= 3 | foe = immune_to_ranged
-     Equipr stone hammer
+
+ 
 //
 ?loc = caves // works on 7 *
 
   ?foe = boss
-    Equipr co
-    Equipl stone ha
+    
+    Equipr ice
+    Equipl vigor
   :?foe.distance < 10 | foe.count >= 4
     Equip bar
   :?foe.distance > 10 & foe.count <= 1
     Equip re
+  HEAL(heal) 
 
 //
 ?loc = icy // works on 5*
@@ -153,30 +169,49 @@ var BARD = ＂Bardiche +11 8*＂
   ?foe.distance <= 10 | foe.count >= 4
     Equip bar
   :?foe = boss 
-    equipl aether
-    equipr aether wa
+     Equip re
+     
+     ?foe.state = 32 & foe.time = 20
+       Equip mind 
+     :?foe.time = 33 & foe.time = 10
+       equip dashing
+     :?foe.time = 33 & foe.time >= 11
+       equip bar
+   
+   
   :
     equip re
+  
+  HEAL(heal)
 //
 ?loc = halls // works on 7* ???
   ?foe = Booo | foe = Big booo
-    Equip vigor wa
+    Equipl vigor wa
+    Equipr moon
   : 
     Equip ba
+    ?foe = boss &
+    ^ item.GetCoolDown(＂Bardiche +11 8*＂) <= 0 
+      ?foe.hp <= 450 
+        ?item.CanActivate(＂Bardiche +11 8*＂)
+          Activate r
+ 
+  ?foe ! immune_to_physical
+    HEAL(heal)
 //
 ?loc = Mushroom forest | loc = angry mushroom
   ?foe = boss
-    
+    equip dash
     ?foe.armor > 0 
       Equip ba
     :
       Equipr co
       Equipl stone ham
   :
-    ?foe.distance > 10 & foe.count <= 4
+    ?foe.distance > 15 & foe.count <= 4
       Equip re
-    :
-      Equip ba
+    :?foe.distance <= 9 
+      Equip bar
 //
 ?loc = temple // no idea what this works on
   ?foe.distance < 10 & foe.count >= 3
@@ -187,7 +222,7 @@ var BARD = ＂Bardiche +11 8*＂
 
 ?loc = rocky // 6*
  
-  DYSANPROT(heal)
+  DYSANPROT()
  
   
 // 
@@ -202,16 +237,24 @@ potions and moving faster easy
   EquipR tri
 
 //
-var stat = 6
+var stat = 15
+var stat2 = 5
 // PRINT SCRIPTS 
->`0,@stat@,Name:@foe.name@
->`0,@stat+1@,Weakness:@DisplayWeak(foe)@
->`0,@stat+2@,State:@foe.state@
->`0,@stat+3@,time:@foe.time@ 
->`0,@stat+4@,Location:@loc.name@
->`0,@stat+5@,@item.left.state@:@item.left.time@
->`0,@stat+6@,
-^@item.right.state@:@item.right.time@
-
-
-
+>`@stat2@,@stat+1@,Use:@DisplayWeak(foe)@
+>`@stat2@,@stat+2@,@foe.state@:@foe.time@ 
+>`@stat2@,@stat+3@,
+^L:@item.left.state@:@item.left.time@
+>`@stat2@,@stat+4@,
+^R:@item.right.state@:@item.right.time@
+>`@stat2@,@stat+5@,
+^Cur:@totaltime@|Best:@loc.besttime@
+^|Avg:@loc.averagetime@
+/*
+>`0,25,<><><><><］<><><><><］<><><><><］<><><><><］
+^<><><><><］<><><><><］<><><><><］<><><><><］
+^<><><><><］<><><><><］<><><><><］<><><><><］
+^<><><><><］<><><><><］<><><><><］<><><><><］
+^<><><><><］<><><><><］<><><><><］<><><><><］
+>`90,0,<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n
+^<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<
+*/
