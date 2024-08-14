@@ -217,16 +217,14 @@ var BARD = ＂Bardiche +11 8*＂
 //
 ?loc = temple // no idea what this works on
   ?foe = boss 
-    
-    
-    ?foe.state >= 32 & foe.state < 112
+    ?foe.state >= 1 & foe.state <= 111
       Equip bard
  
-    :?foe.state = 112 
-      ?foe.state <= 50
-        Equipl mind
-      ?foe.state >= 50
-        Equip re
+    ?foe.state = 112 
+      
+      Equipl re
+      ?foe.time >= 50
+        Equip mind 
       
       
     
