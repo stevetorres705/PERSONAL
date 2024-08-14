@@ -222,12 +222,13 @@ var BARD = ＂Bardiche +11 8*＂
     ?foe.state >= 32 & foe.state < 112
       Equip bard
  
-    :?foe.state = 112 & foe.state = 50
-      Equipl mind
-      ?foe.state ! 50
+    :?foe.state = 112 
+      ?foe.state <= 50
+        Equipl mind
+      ?foe.state >= 50
         Equip re
       
-      Equipl mind
+      
     
     
 
@@ -235,7 +236,7 @@ var BARD = ＂Bardiche +11 8*＂
     ?foe = Cult Guard
       Equip bard
 
-    :?foe.distance < 6 | foe.count >= 5
+    :?foe.distance < 10 | foe.count >= 5
       Equip bard
     
     :
