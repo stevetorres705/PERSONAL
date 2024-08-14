@@ -59,30 +59,32 @@ func DYSANPROT()
    
   :?foe = phase2
     ?foe = vigor 
-      Equipl Poison Sword +1 6*
-      Equipr vigor sh
+      Equipl Poison
+      Equipr Ice
     :?foe = poison 
-      equipl Ice Sword +6 5*
-      Equipr vigor sh
+      equipl Ice 
+      Equipr fire
     :?foe = ice 
       Equipl Fire 
-      Equipr vigor sh
+      Equipr aether
     :?foe = fire
-      Equipl aether sword +2 6*
+      Equipl aether 
       Equipr vigor sh
     :?foe = aether 
-      Equipl vigor swor
-      Equipr vigor sh  :?foe = phase3 
+      Equipl vigor 
+      Equipr poison
    
   ?foe = phase3 
     ?foe.state >= 115 
       // IM FIRING MAH LASER
       ?foe.state = 115 & foe.time = 50 
-        Equipl mind 
+        Equip mind 
         //WEAVE
       :?foe.state = 115 & foe.time > 50
         equip re
         //LAYOUT THAT MF
+      :
+        Equip bar
        
     :
       Equip bar
@@ -175,7 +177,7 @@ var BARD = ＂Bardiche +11 8*＂
        Equip mind 
      :?foe.time = 33 & foe.time = 10
        equip dashing
-     :?foe.time = 33 & foe.time >= 11
+     :?foe.time >= 33 & foe.time >= 11
        equip bar
    
    
@@ -214,10 +216,32 @@ var BARD = ＂Bardiche +11 8*＂
       Equip bar
 //
 ?loc = temple // no idea what this works on
-  ?foe.distance < 10 & foe.count >= 3
-    Equip bard
+  ?foe = boss 
+    
+    
+    ?foe.state >= 32 & foe.state < 112
+      Equip bard
+ 
+    :?foe.state = 112 & foe.state = 50
+      Equipl mind
+      ?foe.state ! 50
+        Equip re
+      
+      Equipl mind
+    
+    
+
   :
-    Equip re
+    ?foe = Cult Guard
+      Equip bard
+
+    :?foe.distance < 6 | foe.count >= 5
+      Equip bard
+    
+    :
+      Equip re
+
+  HEAL(heal)
 //
 
 ?loc = rocky // 6*
@@ -251,6 +275,8 @@ var stat2 = 5
 ^|Avg:@loc.averagetime@
 >`@stat2@,@stat+6@,
 ^@foe.name@ 
+>`@stat2@,@stat+7@, 
+^@foe.count@:@foe.distance@
 /*
 >`0,25,<><><><><］<><><><><］<><><><><］<><><><><］
 ^<><><><><］<><><><><］<><><><><］<><><><><］
