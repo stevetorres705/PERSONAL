@@ -43,51 +43,53 @@ func DisplayWeak(x)
     return none
 //
 func HEAL(h)
-  ?hp = maxhp | heal > 1000
+  ?hp = maxhp | heal > 500
     heal = 10
 
   :?hp <= maxhp / 2 | h > 10
     heal++
     Equipl vigor sw
-    Equipr vigor sh   
+    Equipr vigor wand l
   
 func DYSANPROT()
   
   
   ?foe = phase1 
-    Equip bar
+    Equip bard
    
   :?foe = phase2
     ?foe = vigor 
       Equipl Poison
-      Equipr Ice
+      Equipr poison w
     :?foe = poison 
       equipl Ice 
-      Equipr fire
+      Equipr ice wa
     :?foe = ice 
       Equipl Fire 
-      Equipr aether
+      Equipr fire wa
     :?foe = fire
       Equipl aether 
-      Equipr vigor sh
+      Equipr aether w
     :?foe = aether 
       Equipl vigor 
-      Equipr poison
+      Equipr vigor w
    
   ?foe = phase3 
     ?foe.state >= 115 
       // IM FIRING MAH LASER
-      ?foe.state = 115 & foe.time = 50 
+      ?foe.state = 115 & foe.time = 49
         Equip mind 
         //WEAVE
-      :?foe.state = 115 & foe.time > 50
-        equip re
-        //LAYOUT THAT MF
-      :
-        Equip bar
+      :?foe.state = 115 
+        ?foe.time > 50 &
+        ^ foe.time <= 65
+          equip bash
+          //LAYOUT THAT MF
+        :
+          Equip bard
        
     :
-      Equip bar
+      Equip bard
    
   
  
@@ -127,10 +129,11 @@ var BARD = ＂Bardiche +11 8*＂
     
     
   :?foe.distance >= 10 & foe ! immune_to_ranged
-     Equip rep
+     Equip poison bow
     
   :?foe.count >= 3 | foe = immune_to_ranged
-     Equip bard
+     Equipl vigor
+     Equipr co
     
 
  
@@ -168,23 +171,28 @@ var BARD = ＂Bardiche +11 8*＂
       Equip ba
 //
 ?loc = mine // no idea
-  ?foe.distance <= 10 | foe.count >= 4
-    Equip bar
-  :?foe = boss 
+  
+  ?foe = boss 
      Equip re
      
-     ?foe.state = 32 & foe.time = 20
+     ?foe.state = 32 &
+     ^ foe.time = 20
        Equip mind 
-     :?foe.time = 33 & foe.time = 10
+     :?foe.state = 33 &
+     ^ foe.time = 0
        equip dashing
-     :?foe.time >= 33 & foe.time >= 11
+     :?foe.state >= 33 &
+     ^ foe.time >= 1 
        equip bar
+       HEAL(heal)
    
    
+  :?foe.distance <= 9 | foe.count >= 4
+    Equip bar
   :
     equip re
   
-  HEAL(heal)
+  
 //
 ?loc = halls // works on 7* ???
   ?foe = Booo | foe = Big booo
@@ -201,7 +209,7 @@ var BARD = ＂Bardiche +11 8*＂
   ?foe ! immune_to_physical
     HEAL(heal)
 //
-?loc = Mushroom forest | loc = angry mushroom
+?loc = Mushroom forest & loc.stars > 3
   ?foe = boss
     equip dash
     ?foe.armor > 0 
@@ -214,17 +222,28 @@ var BARD = ＂Bardiche +11 8*＂
       Equip re
     :?foe.distance <= 9 
       Equip bar
-//
-?loc = temple // no idea what this works on
+
+?loc = temple 
+// no idea what this works
   ?foe = boss 
-    ?foe.state >= 1 & foe.state <= 111
+    ?foe.state >= 1 | foe.state <= 111
       Equip bard
  
     ?foe.state = 112 
+      Equip bard
       
-      Equipl re
-      ?foe.time >= 50
-        Equip mind 
+      ?foe.time = 49 
+        Equipl mind
+        Equipr tri
+
+      :?foe.time > 50 & foe.distance <= 5
+        Equipl vigo
+        Equipr ice
+      :?foe.time > 50 & foe.distance >= 5 
+        Equip re
+      
+      
+
       
       
     
@@ -285,3 +304,10 @@ var stat2 = 5
 >`90,0,<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n
 ^<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<\n<
 */
+
+>o-1,0,#green,ascii
+#_
+asciiend
+>o-1,1,#964B00,ascii
+［_］
+asciiend
