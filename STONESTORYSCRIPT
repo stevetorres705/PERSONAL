@@ -46,10 +46,10 @@ func HEAL(h)
   ?hp = maxhp | heal > 500
     heal = 10
 
-  :?hp <= maxhp / 2 | h > 10
+  :?hp <= maxhp / 5 | h > 10
     heal++
-    Equipl vigor sw
-    Equipr vigor wand l
+    Activate potion
+    Equip bar
   
 func DYSANPROT()
   
@@ -59,19 +59,19 @@ func DYSANPROT()
    
   :?foe = phase2
     ?foe = vigor 
-      Equipl Poison
+      Equipl Poison sw
       Equipr poison w
     :?foe = poison 
-      equipl Ice 
+      equipl Ice sw
       Equipr ice wa
     :?foe = ice 
-      Equipl Fire 
+      Equipl Fire sw
       Equipr fire wa
     :?foe = fire
-      Equipl aether 
+      Equipl aether sw
       Equipr aether w
     :?foe = aether 
-      Equipl vigor 
+      Equipl vigor sw
       Equipr vigor w
    
   ?foe = phase3 
@@ -146,12 +146,13 @@ var BARD = ＂Bardiche +11 8*＂
 
   ?foe = boss
     
-    Equipr ice
-    Equipl vigor
-  :?foe.distance < 10 | foe.count >= 4
+    Equipr ice wan
+    Equipl ice
+
+  :?foe.distance < 10 | foe.count >= 5
     Equip bar
-  :?foe.distance > 10 & foe.count <= 1
-    Equip re
+  :?foe.distance >= 10 | foe.count <= 5
+    Equip rep
   HEAL(heal) 
 
 //
@@ -201,9 +202,9 @@ var BARD = ＂Bardiche +11 8*＂
   : 
     Equip ba
     ?foe = boss &
-    ^ item.GetCoolDown(＂Bardiche +11 8*＂) <= 0 
+    ^ item.GetCoolDown(＂Bardiche +15 10*＂) <= 0 
       ?foe.hp <= 450 
-        ?item.CanActivate(＂Bardiche +11 8*＂)
+        ?item.CanActivate()
           Activate r
  
   ?foe ! immune_to_physical
